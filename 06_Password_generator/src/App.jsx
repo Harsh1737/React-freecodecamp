@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import './App.css'
 
   // UseCallback is used to prevent the function from being recreated every time the component is rendered
@@ -11,6 +11,14 @@ function App() {
   const [numberAllowed, setNumberAllowed] = useState(false)
   const [charAllowed, setCharAllowed] = useState(false)
   const [password, setPassword] = useState('')
+
+
+  const passRef = useRef(null)
+
+  const copyToClipboard = useCallback(() => {
+    passRef.current?.select()
+    window.navigator.clipboard.writeText(passRef.current?.value)
+  }, [password])
 
   const passwordGenerator =useCallback(() => {
     let charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -45,10 +53,12 @@ function App() {
           className='outline-none w-full py-1 px-3 text-black'
           placeholder ='Password'
           readOnly
+          ref={passRef}
           />
 
           <button
           className='outline-none bg-blue-500 text-white px-3 py-0.5 shrink-0'
+          onClick={copyToClipboard}
           >Copy</button>
         </div>
 
